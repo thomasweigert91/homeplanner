@@ -2,36 +2,50 @@
 import * as fs from "node:fs";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-
-const filePath = "count.txt";
-
-async function readCount() {
-  return parseInt(
-    await fs.promises.readFile(filePath, "utf-8").catch(() => "0")
-  );
-}
-
-const getCount = createServerFn({
-  method: "GET",
-}).handler(() => {
-  return readCount();
-});
-
-const updateCount = createServerFn({ method: "POST" })
-  .validator((d: number) => d)
-  .handler(async ({ data }) => {
-    const count = await readCount();
-    await fs.promises.writeFile(filePath, `${count + data}`);
-  });
-
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { convexQuery } from "@convex-dev/react-query";
+import { api } from "../../convex/_generated/api";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useUser,
+} from "@clerk/tanstack-start";
+import { Button } from "@/components/ui/button";
+import { useHouseholds } from "@/hooks/useHousehold";
+import { checkAuth } from "convex/household";
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async () => await getCount(),
 });
 
 function Home() {
-  const router = useRouter();
-  const state = Route.useLoaderData();
+  const { user } = useUser();
 
-  return <Link to="/about">About</Link>;
+  const { households } = useHouseholds();
+  console.log("households", households);
+
+  return (
+    <div>
+      <div>
+        <h1>Index Route</h1>
+        <SignedIn>
+          <p>You are signed in</p>
+          <SignOutButton />
+          {!households || households.length === 0 ? (
+            <p>No households found</p>
+          ) : (
+            households?.map((household) => (
+              <p key={household._id}>{household.name}</p>
+            ))
+          )}
+        </SignedIn>
+        <SignedOut>
+          <p>You are signed out</p>
+          <SignInButton />
+        </SignedOut>
+      </div>
+    </div>
+  );
 }
