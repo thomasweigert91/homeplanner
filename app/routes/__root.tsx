@@ -17,6 +17,7 @@ import { ConvexQueryClient } from "@convex-dev/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { getAuth } from "@clerk/tanstack-start/server";
 import { getWebRequest } from "vinxi/http";
+import { Toaster } from "@/components/ui/sonner";
 
 const fetchClerkAuth = createServerFn({ method: "GET" }).handler(async () => {
   const auth = await getAuth(getWebRequest());
@@ -91,6 +92,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             <HeadContent />
           </head>
           <body className="h-full bg-gray-800 text-gray-100">
+            <Toaster />
             {children}
             <Scripts />
           </body>

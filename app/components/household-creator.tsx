@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 const householdSchema = z.object({
   name: z
@@ -40,13 +41,14 @@ export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof householdSchema>) => {
-    console.log("Household name:", data.name);
     mutate(data, {
       onSuccess: (data) => {
         console.log("Household created successfully:", data);
+        toast("Household has been created.", {
+          style: {},
+        });
       },
     });
-    console.log(data);
   };
 
   return (
@@ -56,7 +58,7 @@ export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-sm mt-4 space-y-2"
+          className=" flex w-full max-w-sm mt-4 space-y-2 flex-col gap-2"
         >
           <FormField
             control={form.control}
@@ -75,10 +77,14 @@ export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
               </FormItem>
             )}
           />
+          <Button
+            className="cursor-pointer"
+            type="submit"
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            Submit
+          </Button>
         </form>
-        <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-          Submit
-        </Button>
       </Form>
     </div>
   );
