@@ -58,8 +58,6 @@ export const Route = createRootRouteWithContext<{
     const auth = await fetchClerkAuth();
 
     const { userId, token } = auth;
-    console.log("userId", userId);
-    console.log("token", token);
 
     // During SSR only (the only time serverHttpClient exists),
     // set the Clerk auth token to make HTTP queries with.
@@ -92,7 +90,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <head>
             <HeadContent />
           </head>
-          <body>
+          <body className="h-full bg-gray-800 text-gray-100">
             {children}
             <Scripts />
           </body>

@@ -1,7 +1,8 @@
 import { v } from "convex/values";
-import { internalQuery, mutation } from "./_generated/server";
+import { internalQuery, mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
 
-export const getUserFromClerkId = internalQuery({
+export const getUserFromClerkId = query({
   args: { clerkId: v.string() },
   handler: async ({ db }, { clerkId }) => {
     const user = await db

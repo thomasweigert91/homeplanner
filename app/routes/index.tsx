@@ -13,18 +13,13 @@ import {
   UserButton,
   useUser,
 } from "@clerk/tanstack-start";
-import { Button } from "@/components/ui/button";
 import { useHouseholds } from "@/hooks/useHousehold";
-import { checkAuth } from "convex/household";
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
-  const { user } = useUser();
-
   const { households } = useHouseholds();
-  console.log("households", households);
 
   return (
     <div>
@@ -45,6 +40,7 @@ function Home() {
           <p>You are signed out</p>
           <SignInButton />
         </SignedOut>
+        <Link to="/dashboard">Route to protected</Link>
       </div>
     </div>
   );
