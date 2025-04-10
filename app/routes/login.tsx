@@ -1,5 +1,9 @@
-import { SignIn, SignInButton } from "@clerk/tanstack-start";
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { SignIn, SignInButton, useAuth } from "@clerk/tanstack-start";
+import {
+  createFileRoute,
+  redirect as redirectFn,
+  useParams,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/login")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
@@ -12,10 +16,17 @@ export const Route = createFileRoute("/login")({
 
 function RouteComponent() {
   const { redirect } = Route.useSearch();
-  console.log("redirect", redirect);
+  const { isSignedIn } = useAuth();
+
+  if (isSignedIn) {
+    throw redirectFn({
+      to: redirect || "/dashboard",
+    });
+  }
+
   return (
     <div>
-      <SignIn fallbackRedirectUrl={redirect || "/"} />
+      <SignIn fallbackRedirectUrl={redirect || "/dashboard"} />
     </div>
   );
 }

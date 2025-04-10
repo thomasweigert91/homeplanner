@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as helper from "../helper.js";
 import type * as household from "../household.js";
+import type * as tasks from "../tasks.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,6 +28,7 @@ import type * as household from "../household.js";
 declare const fullApi: ApiFromModules<{
   helper: typeof helper;
   household: typeof household;
+  tasks: typeof tasks;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

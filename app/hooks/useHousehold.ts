@@ -5,7 +5,7 @@ import { api } from "convex/_generated/api";
 
 export const useHouseholds = () => {
   const { data: households, isLoading } = useQuery({
-    ...convexQuery(api.household.getUserHousholds, {}),
+    ...convexQuery(api.household.getUserHoushold, {}),
   });
 
   return { households, isLoading };

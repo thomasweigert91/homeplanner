@@ -1,7 +1,6 @@
-import { Household } from "convex/household";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useConvexMutation } from "@convex-dev/react-query";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Form,
   FormControl,
@@ -42,8 +41,7 @@ export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
 
   const onSubmit = async (data: z.infer<typeof householdSchema>) => {
     mutate(data, {
-      onSuccess: (data) => {
-        console.log("Household created successfully:", data);
+      onSuccess: () => {
         toast("Household has been created.", {
           style: {},
         });

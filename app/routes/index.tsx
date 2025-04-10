@@ -38,9 +38,8 @@ function Home() {
         </SignedIn>
         <SignedOut>
           <p>You are signed out</p>
-          <SignInButton />
+          <Link to="/login">Login</Link>
         </SignedOut>
-        <Link to="/dashboard">Route to protected</Link>
       </div>
     </div>
   );

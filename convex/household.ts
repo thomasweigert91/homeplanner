@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { api, internal } from "./_generated/api";
 import { Doc } from "./_generated/dataModel";
+import { h } from "node_modules/@clerk/clerk-react/dist/useAuth-Do-ds1OD.mjs";
 
 export type Household = Doc<"households">;
 
@@ -13,7 +14,7 @@ export const getAllHouseholds = query({
   },
 });
 
-export const getUserHousholds = query({
+export const getUserHoushold = query({
   args: {},
   handler: async ({ auth, db, runQuery }): Promise<Household[]> => {
     const identity = await auth.getUserIdentity();
@@ -29,13 +30,11 @@ export const getUserHousholds = query({
 
     const households = await db.query("households").collect();
 
-    const userHouseholds = households.filter((household) => {
-      return household.members.some((member) => {
-        return member.userId === user._id;
-      });
+    const userHousehold = households.filter((household) => {
+      return user.connectedHousehold === household._id;
     });
 
-    return userHouseholds;
+    return userHousehold;
   },
 });
 
@@ -56,16 +55,12 @@ export const createHousehold = mutation({
 
     const household = await db.insert("households", {
       name: name,
-      members: [
-        {
-          userId: user._id,
-          name: user.name,
-          profileImageUrl: user.profileImageUrl,
-        },
-      ],
       createdAt: new Date().toISOString(),
       createdBy: user._id,
     });
+
+    await db.patch(user._id, { connectedHousehold: household });
+
     return household;
   },
 });
