@@ -2,6 +2,28 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { api } from "./_generated/api";
 
+export const getTasks = query({
+  args: {},
+  handler: async ({ db, auth, runQuery }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) throw new Error("User not authenticated");
+
+    const clerkId = identity.subject;
+    const user = await runQuery(api.helper.getUserFromClerkId, {
+      clerkId: clerkId,
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const tasks = await db
+      .query("tasks")
+      .filter((q) => q.eq(q.field("householdId"), user.connectedHousehold))
+      .collect();
+
+    return tasks;
+  },
+});
+
 export const createTask = mutation({
   args: {
     title: v.string(),
@@ -35,24 +57,13 @@ export const createTask = mutation({
   },
 });
 
-export const getTasks = query({
-  args: {},
-  handler: async ({ db, auth, runQuery }) => {
-    const identity = await auth.getUserIdentity();
-    if (!identity) throw new Error("User not authenticated");
+export const deleteTask = mutation({
+  args: { taskId: v.id("tasks") },
+  handler: async ({ db }, { taskId }) => {
+    const deleted = await db.delete(taskId);
+    console.log("Deleted task:", deleted);
+    console.log("Task deleted with ID:", taskId);
 
-    const clerkId = identity.subject;
-    const user = await runQuery(api.helper.getUserFromClerkId, {
-      clerkId: clerkId,
-    });
-
-    if (!user) throw new Error("User not found");
-
-    const tasks = await db
-      .query("tasks")
-      .filter((q) => q.eq(q.field("householdId"), user.connectedHousehold))
-      .collect();
-
-    return tasks;
+    return { success: true };
   },
 });

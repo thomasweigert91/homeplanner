@@ -9,10 +9,20 @@ import { api } from "convex/_generated/api";
 
 export const Route = createFileRoute("/_protected/dashboard")({
   loader: async (ctx) => {
+    // Ensure the user is authenticated
+    const user = ctx.context.userId;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    await ctx.context.queryClient.ensureQueryData({
+      ...convexQuery(api.household.getUserHoushold, {}),
+    });
     await ctx.context.queryClient.ensureQueryData({
       ...convexQuery(api.tasks.getTasks, {}),
     });
   },
+  pendingComponent: () => <div>Loading...</div>,
+  errorComponent: () => <div>Error loading tasks</div>,
   component: RouteComponent,
 });
 
@@ -20,6 +30,8 @@ function RouteComponent() {
   const tasksQuery = useSuspenseQuery({
     ...convexQuery(api.tasks.getTasks, {}),
   });
+
+  const tasks = tasksQuery.data;
   const { households } = useHouseholds();
 
   return (
@@ -38,7 +50,7 @@ function RouteComponent() {
       </div>
       <TaskCreator />
 
-      {tasksQuery.data.map((task) => (
+      {tasks.map((task) => (
         <div key={task._id} className="p-4">
           <h3 className="text-xl font-semibold">{task.title}</h3>
           <p className="text-gray-600">Task ID: {task._id}</p>

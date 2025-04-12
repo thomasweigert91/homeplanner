@@ -1,8 +1,17 @@
+import { Header } from "@/components/header";
+import { Menu } from "@/components/menu";
 import { SignedIn } from "@clerk/clerk-react";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected")({
-  beforeLoad: async ({ location, context }) => {
+  beforeLoad: async ({ location, context, search }) => {
     const isAuthenticated = context.userId;
     if (!isAuthenticated) {
       throw redirect({
@@ -18,9 +27,20 @@ export const Route = createFileRoute("/_protected")({
 });
 
 function RouteComponent() {
+  const { location } = useRouterState();
+  const route = location.pathname
+    .split("/")
+    .slice(1)
+    .join()
+    .replace(/^\w/, (c) => c.toUpperCase());
+
   return (
     <SignedIn>
-      <Outlet />
+      <Header route={route} />
+      <Menu />
+      <main className="w-full h-full p-4">
+        <Outlet />
+      </main>
     </SignedIn>
   );
 }

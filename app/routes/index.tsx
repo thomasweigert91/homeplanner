@@ -1,6 +1,11 @@
 // app/routes/index.tsx
 import * as fs from "node:fs";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useRouter,
+} from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
@@ -15,6 +20,14 @@ import {
 } from "@clerk/tanstack-start";
 import { useHouseholds } from "@/hooks/useHousehold";
 export const Route = createFileRoute("/")({
+  beforeLoad: async ({ context }) => {
+    const { userId } = context;
+    if (userId) {
+      throw redirect({ to: "/dashboard" });
+    }
+
+    return null;
+  },
   component: Home,
 });
 
