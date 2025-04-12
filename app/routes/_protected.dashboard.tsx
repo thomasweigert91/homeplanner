@@ -1,9 +1,10 @@
 import { HouseholdCreator } from "@/components/household-creator";
 import { TaskCreator } from "@/components/task-creator";
+import { Calendar } from "@/components/ui/calendar";
 
 import { useHouseholds } from "@/hooks/useHousehold";
 import { convexQuery } from "@convex-dev/react-query";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 
@@ -54,6 +55,10 @@ function RouteComponent() {
         <div key={task._id} className="p-4">
           <h3 className="text-xl font-semibold">{task.title}</h3>
           <p className="text-gray-600">Task ID: {task._id}</p>
+          <p className="text-gray-600">Description: {task.description}</p>
+          <p className="text-gray-600">
+            Due Date: {new Date(task.dueDate).toLocaleString()}
+          </p>
         </div>
       ))}
     </div>

@@ -131,6 +131,7 @@ export const Menu = () => {
                   backgroundColor: "#f0f9ff",
                 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => setIsOpen(false)}
               >
                 <div className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white">
                   {item.icon}
