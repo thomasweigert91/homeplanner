@@ -5,7 +5,7 @@ export default defineSchema({
   households: defineTable({
     name: v.string(),
     createdAt: v.string(),
-    createdBy: v.id("users"),
+    createdBy: v.string(),
   }),
 
   tasks: defineTable({
@@ -18,16 +18,15 @@ export default defineSchema({
     priority: v.optional(v.number()), // z.B. 1 (hoch) bis 5 (niedrig)
     createdAt: v.string(),
     updatedAt: v.string(),
-    createdBy: v.id("users"),
-    updatedBy: v.id("users"),
+    createdBy: v.string(),
+    updatedBy: v.string(),
   }),
 
   users: defineTable({
-    clerkId: v.string(),
+    userId: v.string(),
     name: v.optional(v.string()),
-    email: v.string(),
-    profileImageUrl: v.optional(v.string()),
+    profileImage: v.optional(v.string()),
     createdAt: v.string(),
-    connectedHousehold: v.optional(v.id("households")),
+    householdId: v.optional(v.id("households")),
   }),
 });

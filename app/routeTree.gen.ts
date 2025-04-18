@@ -11,17 +11,24 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RegisterProfileImport } from './routes/register-profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProtectedTasksImport } from './routes/_protected.tasks'
-import { Route as ProtectedStorageImport } from './routes/_protected.storage'
-import { Route as ProtectedSettingsImport } from './routes/_protected.settings'
-import { Route as ProtectedPlantsImport } from './routes/_protected.plants'
-import { Route as ProtectedMealplanImport } from './routes/_protected.mealplan'
-import { Route as ProtectedDashboardImport } from './routes/_protected.dashboard'
+import { Route as ProtectedHouseholdRouteImport } from './routes/_protected/household.route'
+import { Route as ProtectedHouseholdIndexImport } from './routes/_protected/household.index'
+import { Route as ProtectedHouseholdWelcomeImport } from './routes/_protected/household.welcome'
+import { Route as ProtectedHouseholdJoinImport } from './routes/_protected/household.join'
+import { Route as ProtectedHouseholdCreateImport } from './routes/_protected/household.create'
+import { Route as ProtectedHouseholdHouseholdIdImport } from './routes/_protected/household.$householdId'
 
 // Create/Update Routes
+
+const RegisterProfileRoute = RegisterProfileImport.update({
+  id: '/register-profile',
+  path: '/register-profile',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -40,41 +47,42 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedTasksRoute = ProtectedTasksImport.update({
-  id: '/tasks',
-  path: '/tasks',
+const ProtectedHouseholdRouteRoute = ProtectedHouseholdRouteImport.update({
+  id: '/household',
+  path: '/household',
   getParentRoute: () => ProtectedRoute,
 } as any)
 
-const ProtectedStorageRoute = ProtectedStorageImport.update({
-  id: '/storage',
-  path: '/storage',
-  getParentRoute: () => ProtectedRoute,
+const ProtectedHouseholdIndexRoute = ProtectedHouseholdIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedHouseholdRouteRoute,
 } as any)
 
-const ProtectedSettingsRoute = ProtectedSettingsImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => ProtectedRoute,
+const ProtectedHouseholdWelcomeRoute = ProtectedHouseholdWelcomeImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => ProtectedHouseholdRouteRoute,
 } as any)
 
-const ProtectedPlantsRoute = ProtectedPlantsImport.update({
-  id: '/plants',
-  path: '/plants',
-  getParentRoute: () => ProtectedRoute,
+const ProtectedHouseholdJoinRoute = ProtectedHouseholdJoinImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => ProtectedHouseholdRouteRoute,
 } as any)
 
-const ProtectedMealplanRoute = ProtectedMealplanImport.update({
-  id: '/mealplan',
-  path: '/mealplan',
-  getParentRoute: () => ProtectedRoute,
+const ProtectedHouseholdCreateRoute = ProtectedHouseholdCreateImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => ProtectedHouseholdRouteRoute,
 } as any)
 
-const ProtectedDashboardRoute = ProtectedDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => ProtectedRoute,
-} as any)
+const ProtectedHouseholdHouseholdIdRoute =
+  ProtectedHouseholdHouseholdIdImport.update({
+    id: '/$householdId',
+    path: '/$householdId',
+    getParentRoute: () => ProtectedHouseholdRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -101,69 +109,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/dashboard': {
-      id: '/_protected/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardImport
+    '/register-profile': {
+      id: '/register-profile'
+      path: '/register-profile'
+      fullPath: '/register-profile'
+      preLoaderRoute: typeof RegisterProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/_protected/household': {
+      id: '/_protected/household'
+      path: '/household'
+      fullPath: '/household'
+      preLoaderRoute: typeof ProtectedHouseholdRouteImport
       parentRoute: typeof ProtectedImport
     }
-    '/_protected/mealplan': {
-      id: '/_protected/mealplan'
-      path: '/mealplan'
-      fullPath: '/mealplan'
-      preLoaderRoute: typeof ProtectedMealplanImport
-      parentRoute: typeof ProtectedImport
+    '/_protected/household/$householdId': {
+      id: '/_protected/household/$householdId'
+      path: '/$householdId'
+      fullPath: '/household/$householdId'
+      preLoaderRoute: typeof ProtectedHouseholdHouseholdIdImport
+      parentRoute: typeof ProtectedHouseholdRouteImport
     }
-    '/_protected/plants': {
-      id: '/_protected/plants'
-      path: '/plants'
-      fullPath: '/plants'
-      preLoaderRoute: typeof ProtectedPlantsImport
-      parentRoute: typeof ProtectedImport
+    '/_protected/household/create': {
+      id: '/_protected/household/create'
+      path: '/create'
+      fullPath: '/household/create'
+      preLoaderRoute: typeof ProtectedHouseholdCreateImport
+      parentRoute: typeof ProtectedHouseholdRouteImport
     }
-    '/_protected/settings': {
-      id: '/_protected/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof ProtectedSettingsImport
-      parentRoute: typeof ProtectedImport
+    '/_protected/household/join': {
+      id: '/_protected/household/join'
+      path: '/join'
+      fullPath: '/household/join'
+      preLoaderRoute: typeof ProtectedHouseholdJoinImport
+      parentRoute: typeof ProtectedHouseholdRouteImport
     }
-    '/_protected/storage': {
-      id: '/_protected/storage'
-      path: '/storage'
-      fullPath: '/storage'
-      preLoaderRoute: typeof ProtectedStorageImport
-      parentRoute: typeof ProtectedImport
+    '/_protected/household/welcome': {
+      id: '/_protected/household/welcome'
+      path: '/welcome'
+      fullPath: '/household/welcome'
+      preLoaderRoute: typeof ProtectedHouseholdWelcomeImport
+      parentRoute: typeof ProtectedHouseholdRouteImport
     }
-    '/_protected/tasks': {
-      id: '/_protected/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof ProtectedTasksImport
-      parentRoute: typeof ProtectedImport
+    '/_protected/household/': {
+      id: '/_protected/household/'
+      path: '/'
+      fullPath: '/household/'
+      preLoaderRoute: typeof ProtectedHouseholdIndexImport
+      parentRoute: typeof ProtectedHouseholdRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface ProtectedHouseholdRouteRouteChildren {
+  ProtectedHouseholdHouseholdIdRoute: typeof ProtectedHouseholdHouseholdIdRoute
+  ProtectedHouseholdCreateRoute: typeof ProtectedHouseholdCreateRoute
+  ProtectedHouseholdJoinRoute: typeof ProtectedHouseholdJoinRoute
+  ProtectedHouseholdWelcomeRoute: typeof ProtectedHouseholdWelcomeRoute
+  ProtectedHouseholdIndexRoute: typeof ProtectedHouseholdIndexRoute
+}
+
+const ProtectedHouseholdRouteRouteChildren: ProtectedHouseholdRouteRouteChildren =
+  {
+    ProtectedHouseholdHouseholdIdRoute: ProtectedHouseholdHouseholdIdRoute,
+    ProtectedHouseholdCreateRoute: ProtectedHouseholdCreateRoute,
+    ProtectedHouseholdJoinRoute: ProtectedHouseholdJoinRoute,
+    ProtectedHouseholdWelcomeRoute: ProtectedHouseholdWelcomeRoute,
+    ProtectedHouseholdIndexRoute: ProtectedHouseholdIndexRoute,
+  }
+
+const ProtectedHouseholdRouteRouteWithChildren =
+  ProtectedHouseholdRouteRoute._addFileChildren(
+    ProtectedHouseholdRouteRouteChildren,
+  )
+
 interface ProtectedRouteChildren {
-  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
-  ProtectedMealplanRoute: typeof ProtectedMealplanRoute
-  ProtectedPlantsRoute: typeof ProtectedPlantsRoute
-  ProtectedSettingsRoute: typeof ProtectedSettingsRoute
-  ProtectedStorageRoute: typeof ProtectedStorageRoute
-  ProtectedTasksRoute: typeof ProtectedTasksRoute
+  ProtectedHouseholdRouteRoute: typeof ProtectedHouseholdRouteRouteWithChildren
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedMealplanRoute: ProtectedMealplanRoute,
-  ProtectedPlantsRoute: ProtectedPlantsRoute,
-  ProtectedSettingsRoute: ProtectedSettingsRoute,
-  ProtectedStorageRoute: ProtectedStorageRoute,
-  ProtectedTasksRoute: ProtectedTasksRoute,
+  ProtectedHouseholdRouteRoute: ProtectedHouseholdRouteRouteWithChildren,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -174,24 +201,25 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/mealplan': typeof ProtectedMealplanRoute
-  '/plants': typeof ProtectedPlantsRoute
-  '/settings': typeof ProtectedSettingsRoute
-  '/storage': typeof ProtectedStorageRoute
-  '/tasks': typeof ProtectedTasksRoute
+  '/register-profile': typeof RegisterProfileRoute
+  '/household': typeof ProtectedHouseholdRouteRouteWithChildren
+  '/household/$householdId': typeof ProtectedHouseholdHouseholdIdRoute
+  '/household/create': typeof ProtectedHouseholdCreateRoute
+  '/household/join': typeof ProtectedHouseholdJoinRoute
+  '/household/welcome': typeof ProtectedHouseholdWelcomeRoute
+  '/household/': typeof ProtectedHouseholdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/mealplan': typeof ProtectedMealplanRoute
-  '/plants': typeof ProtectedPlantsRoute
-  '/settings': typeof ProtectedSettingsRoute
-  '/storage': typeof ProtectedStorageRoute
-  '/tasks': typeof ProtectedTasksRoute
+  '/register-profile': typeof RegisterProfileRoute
+  '/household/$householdId': typeof ProtectedHouseholdHouseholdIdRoute
+  '/household/create': typeof ProtectedHouseholdCreateRoute
+  '/household/join': typeof ProtectedHouseholdJoinRoute
+  '/household/welcome': typeof ProtectedHouseholdWelcomeRoute
+  '/household': typeof ProtectedHouseholdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -199,12 +227,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/login': typeof LoginRoute
-  '/_protected/dashboard': typeof ProtectedDashboardRoute
-  '/_protected/mealplan': typeof ProtectedMealplanRoute
-  '/_protected/plants': typeof ProtectedPlantsRoute
-  '/_protected/settings': typeof ProtectedSettingsRoute
-  '/_protected/storage': typeof ProtectedStorageRoute
-  '/_protected/tasks': typeof ProtectedTasksRoute
+  '/register-profile': typeof RegisterProfileRoute
+  '/_protected/household': typeof ProtectedHouseholdRouteRouteWithChildren
+  '/_protected/household/$householdId': typeof ProtectedHouseholdHouseholdIdRoute
+  '/_protected/household/create': typeof ProtectedHouseholdCreateRoute
+  '/_protected/household/join': typeof ProtectedHouseholdJoinRoute
+  '/_protected/household/welcome': typeof ProtectedHouseholdWelcomeRoute
+  '/_protected/household/': typeof ProtectedHouseholdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -213,34 +242,36 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/login'
-    | '/dashboard'
-    | '/mealplan'
-    | '/plants'
-    | '/settings'
-    | '/storage'
-    | '/tasks'
+    | '/register-profile'
+    | '/household'
+    | '/household/$householdId'
+    | '/household/create'
+    | '/household/join'
+    | '/household/welcome'
+    | '/household/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/login'
-    | '/dashboard'
-    | '/mealplan'
-    | '/plants'
-    | '/settings'
-    | '/storage'
-    | '/tasks'
+    | '/register-profile'
+    | '/household/$householdId'
+    | '/household/create'
+    | '/household/join'
+    | '/household/welcome'
+    | '/household'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/login'
-    | '/_protected/dashboard'
-    | '/_protected/mealplan'
-    | '/_protected/plants'
-    | '/_protected/settings'
-    | '/_protected/storage'
-    | '/_protected/tasks'
+    | '/register-profile'
+    | '/_protected/household'
+    | '/_protected/household/$householdId'
+    | '/_protected/household/create'
+    | '/_protected/household/join'
+    | '/_protected/household/welcome'
+    | '/_protected/household/'
   fileRoutesById: FileRoutesById
 }
 
@@ -248,12 +279,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RegisterProfileRoute: typeof RegisterProfileRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
   LoginRoute: LoginRoute,
+  RegisterProfileRoute: RegisterProfileRoute,
 }
 
 export const routeTree = rootRoute
@@ -268,7 +301,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_protected",
-        "/login"
+        "/login",
+        "/register-profile"
       ]
     },
     "/": {
@@ -277,40 +311,45 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/dashboard",
-        "/_protected/mealplan",
-        "/_protected/plants",
-        "/_protected/settings",
-        "/_protected/storage",
-        "/_protected/tasks"
+        "/_protected/household"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_protected/dashboard": {
-      "filePath": "_protected.dashboard.tsx",
-      "parent": "/_protected"
+    "/register-profile": {
+      "filePath": "register-profile.tsx"
     },
-    "/_protected/mealplan": {
-      "filePath": "_protected.mealplan.tsx",
-      "parent": "/_protected"
+    "/_protected/household": {
+      "filePath": "_protected/household.route.tsx",
+      "parent": "/_protected",
+      "children": [
+        "/_protected/household/$householdId",
+        "/_protected/household/create",
+        "/_protected/household/join",
+        "/_protected/household/welcome",
+        "/_protected/household/"
+      ]
     },
-    "/_protected/plants": {
-      "filePath": "_protected.plants.tsx",
-      "parent": "/_protected"
+    "/_protected/household/$householdId": {
+      "filePath": "_protected/household.$householdId.tsx",
+      "parent": "/_protected/household"
     },
-    "/_protected/settings": {
-      "filePath": "_protected.settings.tsx",
-      "parent": "/_protected"
+    "/_protected/household/create": {
+      "filePath": "_protected/household.create.tsx",
+      "parent": "/_protected/household"
     },
-    "/_protected/storage": {
-      "filePath": "_protected.storage.tsx",
-      "parent": "/_protected"
+    "/_protected/household/join": {
+      "filePath": "_protected/household.join.tsx",
+      "parent": "/_protected/household"
     },
-    "/_protected/tasks": {
-      "filePath": "_protected.tasks.tsx",
-      "parent": "/_protected"
+    "/_protected/household/welcome": {
+      "filePath": "_protected/household.welcome.tsx",
+      "parent": "/_protected/household"
+    },
+    "/_protected/household/": {
+      "filePath": "_protected/household.index.tsx",
+      "parent": "/_protected/household"
     }
   }
 }

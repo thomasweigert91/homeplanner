@@ -60,8 +60,6 @@ export const Route = createRootRouteWithContext<{
 
     const { userId, token } = auth;
 
-    // During SSR only (the only time serverHttpClient exists),
-    // set the Clerk auth token to make HTTP queries with.
     if (token) {
       ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
     }
@@ -91,7 +89,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <head>
             <HeadContent />
           </head>
-          <body className="h-full bg-gray-800 text-gray-100">
+          <body className="h-full bg-neutral-200 text-neutral-900 antialiased">
             <Toaster />
             {children}
             <Scripts />

@@ -6,10 +6,7 @@ import {
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { convexQuery } from "@convex-dev/react-query";
-import { api } from "../../convex/_generated/api";
+
 import {
   SignedIn,
   SignedOut,
@@ -18,42 +15,19 @@ import {
   UserButton,
   useUser,
 } from "@clerk/tanstack-start";
-import { useHouseholds } from "@/hooks/useHousehold";
+
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ context }) => {
     const { userId } = context;
     if (userId) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/household" });
     }
 
-    return null;
+    throw redirect({ to: "/login" });
   },
   component: Home,
 });
 
 function Home() {
-  const { households } = useHouseholds();
-
-  return (
-    <div>
-      <div>
-        <h1>Index Route</h1>
-        <SignedIn>
-          <p>You are signed in</p>
-          <SignOutButton />
-          {!households || households.length === 0 ? (
-            <p>No households found</p>
-          ) : (
-            households?.map((household) => (
-              <p key={household._id}>{household.name}</p>
-            ))
-          )}
-        </SignedIn>
-        <SignedOut>
-          <p>You are signed out</p>
-          <Link to="/login">Login</Link>
-        </SignedOut>
-      </div>
-    </div>
-  );
+  return <></>;
 }
