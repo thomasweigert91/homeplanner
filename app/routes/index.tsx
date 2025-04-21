@@ -19,6 +19,7 @@ import {
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ context }) => {
     const { userId } = context;
+
     if (userId) {
       throw redirect({ to: "/household" });
     }

@@ -41,7 +41,6 @@ export const Route = createFileRoute("/register-profile")({
 });
 
 function RegisterProfile() {
-  const { userId } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof registerProfileSchema>>({
@@ -80,9 +79,7 @@ function RegisterProfile() {
     setIsLoading(true);
 
     createUser({
-      userId: userId!,
       name: data.username,
-      createdAt: new Date().toISOString(),
     });
 
     // Kein Redirect hier, da er bereits im onSuccess-Callback stattfindet

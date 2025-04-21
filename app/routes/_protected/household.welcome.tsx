@@ -18,8 +18,7 @@ export const Route = createFileRoute("/_protected/household/welcome")({
 });
 
 function RouteComponent() {
-  const { userId } = useAuth();
-  const user = useConvexQuery(api.helper.getUserData, { userId: userId! });
+  const user = useConvexQuery(api.helper.getCurrentUser);
 
   return (
     <div className="container mx-auto px-4 py-8">

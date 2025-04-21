@@ -1,14 +1,18 @@
 import { v } from "convex/values";
 import { internalQuery, mutation, query } from "./_generated/server";
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 
-export const getUserData = query({
-  args: { userId: v.string() },
-  handler: async ({ db }, { userId }) => {
+export const getCurrentUser = query({
+  args: {},
+  handler: async ({ db, auth }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("User not authenticated");
+    }
+    const clerkId = identity.subject;
+
     const user = await db
       .query("users")
-      .filter((q) => q.eq(q.field("userId"), userId))
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
       .first();
     return user;
   },
@@ -16,18 +20,23 @@ export const getUserData = query({
 
 export const createUser = mutation({
   args: {
-    userId: v.string(),
     name: v.optional(v.string()),
     email: v.optional(v.string()),
     profileImage: v.optional(v.string()),
-    createdAt: v.optional(v.string()),
   },
-  handler: async ({ db }, { userId, name }) => {
+  handler: async ({ db, auth }, { name }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("User not authenticated");
+    }
+    const clerkId = identity.subject;
+    const currentDate = new Date().toISOString();
+
     await db
       .insert("users", {
-        userId,
+        clerkId,
         name,
-        createdAt: new Date().toISOString(),
+        createdAt: currentDate,
       })
       .then((user) => {
         console.log("User created successfully:", user);

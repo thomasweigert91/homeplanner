@@ -15,18 +15,27 @@ export default defineSchema({
     assignedTo: v.optional(v.id("users")),
     done: v.boolean(),
     dueDate: v.optional(v.string()),
-    priority: v.optional(v.number()), // z.B. 1 (hoch) bis 5 (niedrig)
-    createdAt: v.string(),
+    priority: v.optional(v.number()),
     updatedAt: v.string(),
     createdBy: v.string(),
     updatedBy: v.string(),
   }),
 
   users: defineTable({
-    userId: v.string(),
+    clerkId: v.string(),
     name: v.optional(v.string()),
     profileImage: v.optional(v.string()),
-    createdAt: v.string(),
+    createdAt: v.optional(v.string()),
     householdId: v.optional(v.id("households")),
-  }),
+  }).index("by_clerkId", ["clerkId"]),
+
+  householdMembers: defineTable({
+    userId: v.id("users"),
+    householdId: v.id("households"),
+    role: v.string(), // "owner", "admin", "member"
+    joinedAt: v.string(),
+    invitedBy: v.optional(v.id("users")),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_householdId", ["householdId"]),
 });

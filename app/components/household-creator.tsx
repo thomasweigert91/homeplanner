@@ -31,8 +31,6 @@ const householdSchema = z.object({
 type HouseholdCreatorProps = {};
 
 export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
-  const { userId } = useAuth();
-
   const { mutate: createHousehold } = useMutation({
     mutationFn: useConvexMutation(api.household.createHousehold),
   });
@@ -45,13 +43,8 @@ export const HouseholdCreator: FC<HouseholdCreatorProps> = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof householdSchema>) => {
-    if (!userId) {
-      toast.error("User ID fehlt.");
-      return;
-    }
-
     createHousehold(
-      { ...data, userId },
+      { name: data.name },
       {
         onSuccess: (data) => {
           toast("Haushalt wurde erfolgreich erstellt.", {

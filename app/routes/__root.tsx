@@ -85,11 +85,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
       <ConvexProviderWithClerk useAuth={useAuth} client={context.convexClient}>
-        <html>
+        <html className="h-full">
           <head>
             <HeadContent />
           </head>
-          <body className="h-full bg-neutral-200 text-neutral-900 antialiased">
+          <body className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-300 to-sky-200 text-blue-950 antialiased">
             <Toaster />
             {children}
             <Scripts />
